@@ -9,21 +9,21 @@ def index():
     return render_template("index.html")
 
 @app.route('/shopping-cart')
-def index():
+def shopping_cart():
     list_products = []
     return render_template("index.html")
 
 @app.route('/product-id')
-def index():
+def product():
     list_products = []
     return render_template("index.html")
 
 @app.route('/login')
-def index():
+def login():
     list_products = []
     return render_template("login.html")
 
 @app.route('/register')
-def index():
+def register():
     list_products = []
     return render_template("register.html")

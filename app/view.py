@@ -5,7 +5,7 @@ from flask import url_for
 # Routes
 @app.route('/')
 def index():
-    list_products = []
+    list_items = []
     return render_template("index.html")
 
 @app.route('/shopping-cart')
@@ -15,15 +15,12 @@ def shopping_cart():
 
 @app.route('/product-id')
 def product():
-    list_products = []
     return render_template("index.html")
 
 @app.route('/login')
 def login():
-    list_products = []
     return render_template("login.html")
 
 @app.route('/register')
 def register():
-    list_products = []
     return render_template("register.html")

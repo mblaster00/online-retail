@@ -8,14 +8,14 @@ def index():
     list_items = []
     return render_template("index.html")
 
-@app.route('/shopping-cart')
-def shopping_cart():
+@app.route('/shopping-history/<customer_id>')
+def shopping_cart(customer_id):
     list_products = []
-    return render_template("index.html")
+    return render_template("shopping-cart.html")
 
-@app.route('/product-id')
-def product():
-    return render_template("index.html")
+@app.route('/product/<product_id>')
+def product(product_id):
+    return render_template("product-page.html")
 
 @app.route('/login')
 def login():

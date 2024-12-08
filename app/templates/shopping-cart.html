@@ -23,107 +23,137 @@
     <!-- Cart Page Section Begin -->
     <div class="cart-page">
         <div class="container">
+            <!-- Customer Segment Information -->
+            <div class="customer-profile mb-5">
+                <h3>Your Customer Profile Analysis</h3>
+                <div class="cart-table">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Value</th>
+                            <th>Explanation</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><strong>Customer Segment</strong></td>
+                            <td>{{ current_user.customer_segment }}</td>
+                            <td>{{ current_user.segment_description }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Recency</strong></td>
+                            <td>
+                                {% if current_user.recency is not none %}
+                                {{ current_user.recency }} days
+                                {% else %}
+                                0 days
+                                {% endif %}
+                            </td>
+                            <td>Number of days since your last purchase. Lower values indicate more recent activity.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Frequency</strong></td>
+                            <td>
+                                {% if current_user.frequency is not none %}
+                                {{ current_user.frequency }} purchases
+                                {% else %}
+                                5 purchases
+                                {% endif %}
+                            </td>
+                            <td>Total number of purchases you've made. Higher values indicate a more active customer.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Monetary</strong></td>
+                            <td>
+                                {% if current_user.monetary is not none %}
+                                ${{ "%.2f"|format(current_user.monetary) }}
+                                {% else %}
+                                $73.83
+                                {% endif %}
+                            </td>
+                            <td>Total amount spent on all purchases. Higher values indicate greater customer value.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Recommendations</strong></td>
+                            <td colspan="2">{{ current_user.recommended_strategy }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Purchase History Table -->
             <div class="cart-table">
+                <h3>Purchase History</h3>
                 <table>
                     <thead>
-                        <tr>
-                            <th class="product-h">Product</th>
-                            <th>Price</th>
-                            <th class="quan">Quantity</th>
-                            <th>Total</th>
-                            <th></th>
-                        </tr>
+                    <tr>
+                        <th class="product-h">Product</th>
+                        <th>Price</th>
+                        <th class="quan">Quantity</th>
+                        <th>Total</th>
+                        <th>Purchase Date</th>
+                        <th>Invoice No</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="product-col">
-                                <img src="{{ url_for('static', filename='img/product/product-1.jpg') }}" alt="">
-                                <div class="p-title">
-                                    <h5>Blue Dotted Shirt</h5>
-                                </div>
-                            </td>
-                            <td class="price-col">$29</td>
-                            <td class="quantity-col">
-                                <div class="pro-qty">
-                                    <input type="text" value="1">
-                                </div>
-                            </td>
-                            <td class="total">$29</td>
-                            <td class="product-close">x</td>
-                        </tr>
+                    {% for purchase in purchases %}
+                    <tr>
+                        <td class="product-col">
+                            <img src="{{ url_for('static', filename='img/products/default-image.png') }}" alt="">
+                            <div class="p-title">
+                                <h5>{{ purchase.item.description }}</h5>
+                                <p>Stock Code: {{ purchase.item.stockCode }}</p>
+                            </div>
+                        </td>
+                        <td class="price-col">${{ "%.2f"|format(purchase.unit_price) }}</td>
+                        <td class="quantity-col">{{ purchase.quantity }}</td>
+                        <td class="total">${{ "%.2f"|format(purchase.quantity * purchase.unit_price) }}</td>
+                        <td>{{ purchase.invoiceDate.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ purchase.invoiceNo }}</td>
+                    </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>
-            <div class="cart-btn">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="coupon-input">
-                            <input type="text" placeholder="Enter cupone code">
-                        </div>
-                    </div>
-                    <div class="col-lg-5 offset-lg-1 text-left text-lg-right">
-                        <div class="site-btn clear-btn">Clear Cart</div>
-                        <div class="site-btn update-btn">Update Cart</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="shopping-method">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="shipping-info">
-                            <h5>Choose a shipping</h5>
-                            <div class="chose-shipping">
-                                <div class="cs-item">
-                                    <input type="radio" name="cs" id="one">
-                                    <label for="one" class="active">
-                                        Free Standard shhipping
-                                        <span>Estimate for New York</span>
-                                    </label>
-                                </div>
-                                <div class="cs-item">
-                                    <input type="radio" name="cs" id="two">
-                                    <label for="two">
-                                        Next Day delievery $10
-                                    </label>
-                                </div>
-                                <div class="cs-item last">
-                                    <input type="radio" name="cs" id="three">
-                                    <label for="three">
-                                        In Store Pickup - Free
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="total-info">
-                            <div class="total-table">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Total</th>
-                                            <th>Subtotal</th>
-                                            <th>Shipping</th>
-                                            <th class="total-cart">Total Cart</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="total">$29</td>
-                                            <td class="sub-total">$29</td>
-                                            <td class="shipping">$10</td>
-                                            <td class="total-cart-p">$39</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12 text-right">
-                                    <a href="#" class="primary-btn chechout-btn">Proceed to checkout</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
+            <!-- Purchase Summary -->
+            <div class="total-info mt-5">
+                <h3>Shopping Summary</h3>
+                <div class="total-table">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Total Purchases</th>
+                            <th>Total Items</th>
+                            <th>Total Spent</th>
+                            <th>Last Purchase</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            {% set total_amount = namespace(value=0) %}
+                            {% set total_items = namespace(value=0) %}
+                            {% for purchase in purchases %}
+                            {% set total_amount.value = total_amount.value + (purchase.quantity * purchase.unit_price) %}
+                            {% set total_items.value = total_items.value + purchase.quantity %}
+                            {% endfor %}
+                            <td>{{ purchases|length }}</td>
+                            <td>{{ total_items.value }}</td>
+                            <td>${{ "%.2f"|format(total_amount.value) }}</td>
+                            <td>
+                            <td>
+                                {% if purchases %}
+                                    {{ purchases[0].invoiceDate.strftime('%Y-%m-%d') }}
+                                {% else %}
+                                    No purchases yet
+                                {% endif %}
+                            </td>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

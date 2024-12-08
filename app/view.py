@@ -137,36 +137,52 @@ def login():
 @app.route('/buy/<int:item_id>', methods=['POST'])
 @login_required
 def buy_item(item_id):
-    item = Item.query.get_or_404(item_id)
-    quantity = int(request.form.get('quantity', 1))
+    try:
+        print(f"Processing purchase for item {item_id}")
+        item = Item.query.get_or_404(item_id)
+        quantity = int(request.form.get('quantity', 1))
+        print(f"Quantity: {quantity}")
 
-    # Create new purchase
-    purchase = Buy(
-        customerId=current_user.id,
-        itemId=item_id,
-        quantity=quantity,
-        unit_price=item.unit_price,
-        invoiceDate=datetime.utcnow()
-    )
+        # Changed current_user.id to current_user.customerId
+        purchase = Buy(
+            customerId=current_user.customerId,  # Changed this line
+            itemId=item_id,
+            quantity=quantity,
+            unit_price=item.unit_price,
+            invoiceDate=datetime.utcnow(),
+            invoiceNo=f"INV-{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
+        )
 
-    db.session.add(purchase)
-    db.session.commit()
+        db.session.add(purchase)
+        db.session.commit()
+        print("Purchase saved successfully")
 
-    # Update customer's RFM metrics and cluster
-    update_customer_segment(current_user.id)
+        # Also change this to use customerId
+        flash('Purchase successful!', 'success')
+        return redirect(url_for('shopping_cart', customer_id=current_user.customerId))
 
-    flash('Purchase successful!', 'success')
-    return redirect(url_for('shopping_cart', customer_id=current_user.id))
+    except Exception as e:
+        print(f"Error during purchase: {str(e)}")
+        db.session.rollback()
+        flash('Error processing your purchase. Please try again.', 'error')
+        return redirect(url_for('product', product_id=item_id))
+
 
 @app.route('/shopping-history/<int:customer_id>')
 @login_required
 def shopping_cart(customer_id):
-    if current_user.id != customer_id:
+    if current_user.customerId != customer_id:
         flash('Unauthorized access', 'error')
         return redirect(url_for('index'))
 
-    purchases = Buy.query.filter_by(customerId=customer_id).all()
+    # Get purchases sorted by date
+    purchases = Buy.query.filter_by(customerId=customer_id) \
+        .order_by(Buy.invoiceDate.desc()) \
+        .all()
+
     return render_template("shopping-cart.html", purchases=purchases)
+
+
 
 def update_customer_segment(customer_id):
     customer = Customer.query.get(customer_id)

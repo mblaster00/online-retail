@@ -7,9 +7,7 @@
                 <div class="col-lg-4">
                     <div class="page-breadcrumb">
                         <h2>Shirts<span>.</span></h2>
-                        <a href="#">Home</a>
-                        <a href="#">Dresses</a>
-                        <a class="active" href="#">Night Dresses</a>
+                        <a href="{{ url_for('index') }}">Home</a>
                     </div>
                 </div>
                 <div class="col-lg-8">
@@ -32,50 +30,39 @@
                     <div class="product-slider owl-carousel">
                         <div class="product-img">
                             <figure>
-                                <img src="{{ url_for('static', filename='img/product/product-1.jpg') }}" alt="">
-                                <div class="p-status">new</div>
-                            </figure>
-                        </div>
-                        <div class="product-img">
-                            <figure>
-                                <img src="{{ url_for('static', filename='img/product/product-1.jpg') }}" alt="">
+                                <img src="{{ url_for('static', filename='img/products/default-image.png') }}" alt="{{ item.description }}">
                                 <div class="p-status">new</div>
                             </figure>
                         </div>
                     </div>
-                    
                 </div>
                 <div class="col-lg-6">
                     <div class="product-content">
-                        <h2>Dotted Blue Shirt</h2>
+                        <h2>{{ item.description }}</h2>
                         <div class="pc-meta">
-                            <h5>$22.90</h5>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                            </div>
+                            <h5>${{ "%.2f"|format(item.unit_price) }}</h5>
                         </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo
-                            viverra maecenas accumsan lacus vel facilisis.</p>
                         <ul class="tags">
-                            <li><span>Category :</span> Men’s Wear</li>
-                            <li><span>Tags :</span> man, shirt, dotted, elegant, cool</li>
+                            <li><span>Stock Code:</span> {{ item.stockCode }}</li>
                         </ul>
-                        <div class="product-quantity">
-                            <div class="pro-qty">
-                                <input type="text" value="1">
+                        <form action="{{ url_for('buy_item', item_id=item.itemId) }}" method="POST">
+                            <div class="product-quantity">
+                                <div class="pro-qty">
+                                    <input type="number" name="quantity" value="1" min="1">
+                                </div>
                             </div>
+                            <button type="submit" class="primary-btn pc-btn">Buy Product</button>
+                        </form>
+
+                        {% if customer_segment %}
+                        <div class="p-info">
+                            <li>Customer Segment: {{ customer_segment }}</li>
+                            <li>{{ segment_description }}</li>
+                            {% if recommended_strategy %}
+                            <li>Special Offer: {{ recommended_strategy }}</li>
+                            {% endif %}
                         </div>
-                        <a href="#" class="primary-btn pc-btn">Buy Product</a>
-                        <ul class="p-info">
-                            <li>Product Information</li>
-                            <li>Reviews</li>
-                            <li>Product Care</li>
-                        </ul>
+                        {% endif %}
                     </div>
                 </div>
             </div>

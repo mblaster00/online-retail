@@ -4,12 +4,11 @@
     <section class="page-add cart-page-add">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <div class="page-breadcrumb">
-                        <h2>Cart<span>.</span></h2>
-                        <a href="#">Home</a>
-                        <a href="#">Dresses</a>
-                        <a class="active" href="#">Night Dresses</a>
+                        <h2>Purchase History<span>.</span></h2>
+                        <a href="{{ url_for('index') }}">Home</a>
+                        <a href="#">History</a>
                     </div>
                 </div>
                 <div class="col-lg-8">
@@ -50,7 +49,7 @@
                                 0 days
                                 {% endif %}
                             </td>
-                            <td>Number of days since your last purchase. Lower values indicate more recent activity.</td>
+                            <td>Number of days since your last purchase.</td>
                         </tr>
                         <tr>
                             <td><strong>Frequency</strong></td>
@@ -61,7 +60,7 @@
                                 5 purchases
                                 {% endif %}
                             </td>
-                            <td>Total number of purchases you've made. Higher values indicate a more active customer.</td>
+                            <td>Total number of purchases you've made.</td>
                         </tr>
                         <tr>
                             <td><strong>Monetary</strong></td>
@@ -72,7 +71,7 @@
                                 $73.83
                                 {% endif %}
                             </td>
-                            <td>Total amount spent on all purchases. Higher values indicate greater customer value.</td>
+                            <td>Total amount spent on all purchases.</td>
                         </tr>
                         <tr>
                             <td><strong>Recommendations</strong></td>

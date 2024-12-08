@@ -1,6 +1,5 @@
 from flask import render_template, request, redirect, url_for, flash, session
-from werkzeug.security import generate_password_hash
-
+from sqlalchemy import func
 from app.config import app
 from app.model import db, Customer, Buy, Item
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
@@ -13,18 +12,29 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-# Customize the login redirection
-@login_manager.unauthorized_handler
-def unauthorized():
-    flash('Please log in to view this product.', 'error')
-    return redirect(url_for('login', next=request.url))
-
 # Load the RFM model
 def load_rfm_model():
     with open('rfm_model.pkl', 'rb') as file:
         return pickle.load(file)
 
 rfm_model = load_rfm_model()
+
+@app.context_processor
+def inject_cart_count():
+    if current_user.is_authenticated:
+        # Count distinct items bought by the customer
+        item_count = db.session.query(func.count(Buy.itemId.distinct())) \
+            .filter(Buy.customerId == current_user.customerId) \
+            .scalar()
+    else:
+        item_count = 0
+    return dict(cart_count=item_count)
+
+# Customize the login redirection
+@login_manager.unauthorized_handler
+def unauthorized():
+    flash('Please log in to view this product.', 'error')
+    return redirect(url_for('login', next=request.url))
 
 @login_manager.user_loader
 def load_user(user_id):

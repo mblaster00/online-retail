@@ -39,9 +39,14 @@ def logout():
 
 @app.route('/')
 def index():
-    # Get all items from database
-    items = Item.query.all()
-    return render_template("index.html", items=items)
+    try:
+        # Get all items from database
+        items = Item.query.all()
+        return render_template("index.html", items=items)
+    except Exception as e:
+        print(f"Error: {e}")  # For debugging
+        # Return empty list if there's an error
+        return render_template("index.html", items=[])
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

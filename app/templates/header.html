@@ -37,8 +37,12 @@
                         </a>
                     </div>
                     <div class="user-access">
-                        <a href="{{ url_for('register') }}">Register</a>
-                        <a href="{{ url_for('login') }}" class="in">Sign in</a>
+                        {% if not current_user.is_authenticated %}
+                            <a href="{{ url_for('register') }}">Register</a>
+                            <a href="{{ url_for('login') }}" class="in">Sign in</a>
+                        {% else %}
+                            <a href="{{ url_for('logout') }}" class="in">Sign out</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

@@ -70,35 +70,42 @@
                 <div class="row">
                     <div class="col-lg-12 text-center">
                         <div class="section-title">
-                            <h2>Recommended Products</h2>
+                            <h2>List of products</h2>
                         </div>
                         <ul class="product-controls">
                             <li data-filter="*">All</li>
-                            <li data-filter=".dresses">Dresses</li>
-                            <li data-filter=".shoes">Shoes</li>
-                            <li data-filter=".accesories">Accesories</li>
-                            <li data-filter=".others">Others</li>
+                            <li data-filter=".recommended">Recommended Products</li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="row" id="product-list">
-                <div class="col-lg-3 col-sm-6 mix all dresses bags">
+                {% for item in items %}
+                <div class="col-lg-3 col-sm-6 mix all recommended">
                     <div class="single-product-item">
                         <figure>
-                            <a href="#"><img src="{{ url_for('static', filename='img/products/default-image.png') }}" alt=""></a>
+                            <a href="{{ url_for('product', product_id=item.itemId) }}">
+                                <img src="{{ url_for('static', filename='img/products/default-image.png') }}" alt="{{ item.description }}">
+                            </a>
+                            {% if item.is_new %}
                             <div class="p-status">new</div>
+                            {% elif item.is_sale %}
+                            <div class="p-status sale">sale</div>
+                            {% elif item.is_popular %}
+                            <div class="p-status popular">popular</div>
+                            {% endif %}
                         </figure>
                         <div class="product-text">
-                            <h6>Green Dress with details</h6>
-                            <p>$22.90</p>
+                            <h6>{{ item.description }}</h6>
+                            <p>${{ "%.2f"|format(item.unit_price) }}</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-sm-6 mix all dresses bags">
+                {% endfor %}
+                <div class="col-lg-3 col-sm-6 mix all recommended">
                     <div class="single-product-item">
                         <figure>
-                            <a href="{{ url_for('product', product_id=0) }}"><img src="{{ url_for('static', filename='img/products/default-image.png') }}" alt=""></a>
+                            <a href="#"><img src="{{ url_for('static', filename='img/products/default-image.png') }}" alt=""></a>
                             <div class="p-status sale">sale</div>
                         </figure>
                         <div class="product-text">
@@ -107,11 +114,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-sm-6 mix all shoes accesories">
+                <div class="col-lg-3 col-sm-6 mix all recommended">
                     <div class="single-product-item">
                         <figure>
-                            <a href="{{ url_for('product', product_id=0) }}"><img src="{{ url_for('static', filename='img/products/default-image.png') }}" alt=""></a>
-                            <div class="p-status">new</div>
+                            <a href="#"><img src="{{ url_for('static', filename='img/products/default-image.png') }}" alt=""></a>
                         </figure>
                         <div class="product-text">
                             <h6>One piece bodysuit</h6>
@@ -119,10 +125,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-sm-6 mix all shoes accesories">
+                <div class="col-lg-3 col-sm-6 mix all">
                     <div class="single-product-item">
                         <figure>
-                            <a href="{{ url_for('product', product_id=0) }}"><img src="{{ url_for('static', filename='img/products/default-image.png') }}" alt=""></a>
+                            <a href="#"><img src="{{ url_for('static', filename='img/products/default-image.png') }}" alt=""></a>
                             <div class="p-status popular">popular</div>
                         </figure>
                         <div class="product-text">
@@ -131,42 +137,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-sm-6 mix all dresses shoes">
-                    <div class="single-product-item">
-                        <figure>
-                            <a href="{{ url_for('product', product_id=0) }}"><img src="{{ url_for('static', filename='img/products/default-image.png') }}" alt=""></a>
-                            <div class="p-status">new</div>
-                        </figure>
-                        <div class="product-text">
-                            <h6>Green Dress with details</h6>
-                            <p>$22.90</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6 mix all accesories bags">
-                    <div class="single-product-item">
-                        <figure>
-                            <a href="#"><img src="{{ url_for('static', filename='img/products/default-image.png') }}" alt=""></a>
-                            <div class="p-status sale">sale</div>
-                        </figure>
-                        <div class="product-text">
-                            <h6>Yellow Maxi Dress</h6>
-                            <p>$25.90</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6 mix all dresses bags">
-                    <div class="single-product-item">
-                        <figure>
-                            <a href="#"><img src="{{ url_for('static', filename='img/products/default-image.png') }}" alt=""></a>
-                        </figure>
-                        <div class="product-text">
-                            <h6>One piece bodysuit</h6>
-                            <p>$19.90</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6 mix all accesories bags">
+                <div class="col-lg-3 col-sm-6 mix all">
                     <div class="single-product-item">
                         <figure>
                             <a href="#"><img src="{{ url_for('static', filename='img/products/default-image.png') }}" alt=""></a>

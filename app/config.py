@@ -12,5 +12,8 @@ app = Flask(__name__)
 # app.config.from_object('config')
 
 # MySQL configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://Mblaster:lpmss1998@localhost/Mblaster$Online_Retail'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Vegeta#5@localhost/online_retail'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Secret key for session management
+app.config['SECRET_KEY'] = 'Vegeta#5'

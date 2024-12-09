@@ -46,29 +46,28 @@ class Customer(db.Model, UserMixin):
     # Relationships
     purchases = db.relationship('Buy', backref='customer', lazy=True)
 
-    def calculate_rfm_metrics(self, reference_date=None):
-        """Calculate RFM metrics for the customer"""
-        if reference_date is None:
-            reference_date = datetime.now()
+def calculate_rfm_metrics(self, reference_date=None):
+    """Calculate RFM metrics for the customer"""
+    if reference_date is None:
+        reference_date = datetime.now()
 
-        purchases = Buy.query.filter_by(customerId=self.customerId).all()
+    purchases = Buy.query.filter_by(customerId=self.customerId).all()
 
-        if purchases:
-            # Recency
-            last_purchase_date = max(purchase.invoiceDate for purchase in purchases)
-            self.recency = (reference_date - last_purchase_date).days
+    if purchases:
+        # Recency: days since last purchase
+        last_purchase_date = max(purchase.invoiceDate for purchase in purchases)
+        self.recency = (reference_date - last_purchase_date).days
 
-            # Frequency
-            self.frequency = len(purchases)
+        # Frequency: count of purchases
+        self.frequency = len(purchases)
 
-            # Monetary
-            self.monetary = sum(purchase.quantity * purchase.unit_price for purchase in purchases)
+        # Monetary: total amount spent
+        self.monetary = sum(purchase.quantity * purchase.unit_price for purchase in purchases)
 
-            # Log transformations
-            self.log_recency = np.log1p(self.recency)
-            self.log_frequency = np.log1p(self.frequency)
-            self.log_monetary = np.log1p(self.monetary)
-
+        # Log transformations if needed by your model
+        self.log_recency = np.log1p(self.recency)
+        self.log_frequency = np.log1p(self.frequency)
+        self.log_monetary = np.log1p(self.monetary)
 
 class Item(db.Model):
     __tablename__ = 'item'

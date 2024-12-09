@@ -43,33 +43,27 @@
                         <tr>
                             <td><strong>Recency</strong></td>
                             <td>
-                                {% if current_user.recency is not none %}
-                                {{ current_user.recency }} days
+                                {% if recency is not none %}
+                                {{ recency }} days
                                 {% else %}
-                                0 days
+                                No purchases yet
                                 {% endif %}
                             </td>
                             <td>Number of days since your last purchase.</td>
                         </tr>
                         <tr>
                             <td><strong>Frequency</strong></td>
-                            <td>
-                                {% if current_user.frequency is not none %}
-                                {{ current_user.frequency }} purchases
-                                {% else %}
-                                5 purchases
-                                {% endif %}
-                            </td>
-                            <td>Total number of purchases you've made.</td>
+                            <td>{{ purchases|length }} purchases</td>
+                            <td>Total number of purchases made.</td>
                         </tr>
                         <tr>
                             <td><strong>Monetary</strong></td>
                             <td>
-                                {% if current_user.monetary is not none %}
-                                ${{ "%.2f"|format(current_user.monetary) }}
-                                {% else %}
-                                $73.83
-                                {% endif %}
+                                {% set total = namespace(value=0) %}
+                                {% for purchase in purchases %}
+                                {% set total.value = total.value + (purchase.quantity * purchase.unit_price) %}
+                                {% endfor %}
+                                ${{ "%.2f"|format(total.value) }}
                             </td>
                             <td>Total amount spent on all purchases.</td>
                         </tr>

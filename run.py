@@ -9,7 +9,7 @@ if __name__ == '__main__':
     # with app.app_context():
         # db.create_all()
         # insert_data()
-    app.run(debug=True)
+    app.run(debug=False)
 
 # def insert_data():
 #     items_data = [

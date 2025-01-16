@@ -16,4 +16,4 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://"username":"password"5@localhos
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Secret key for session management
-app.config['SECRET_KEY'] = 'Vegeta#5'
+app.config['SECRET_KEY'] = 'password'
